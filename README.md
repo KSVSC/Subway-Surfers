@@ -1,16 +1,16 @@
-### Subway-Surfers
+# Subway-Surfers
 
 ## Execute:
 1.Run the index.html file
 
-# CONTROLS:
+### CONTROLS:
 A/D- Move the camera SideWise
 Down- Duck
 W/S - Move the camera Front/Back
 Space- Jump
 Z - GrayScale
 
-# FEATURES:
+### FEATURES:
 -> Implemented Game map
 -> Player movement(left,right,jump,Duck)
 -> PoliceMan who follows the player
