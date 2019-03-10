@@ -32,7 +32,7 @@ var TrainBB = {};
 
 var loadingScreen = {
     scene: new THREE.Scene(),
-    camera: new THREE.PerspectiveCamera(90, 1280 / 720, 0.1, 1000),
+    camera: new THREE.PerspectiveCamera(90, 1280 / 560, 0.1, 1000),
     box: new THREE.Mesh(
         new THREE.BoxGeometry(0.5, 0.5, 0.5),
         new THREE.MeshBasicMaterial({ color: 0x4444ff })
@@ -51,8 +51,7 @@ var Gray = 0;
 var timef1, timef2;
 var x = 0;
 var score = 0;
-// document.getElementById("score").innerHTML = score;
-// document.getElementById("life").innerHTML = alive;
+
 
 //models index
 var models = {
@@ -102,11 +101,6 @@ var models = {
         mtl: "./overheadRoundColored.mtl",
         mesh: null
     },
-    tree: {
-        obj: "./treeLarge.obj",
-        mtl: "./treeLarge.mtl",
-        mesh: null
-    },
     obj2: {
         obj: "./barrierWall.obj",
         mtl: "./barrierWall.mtl",
@@ -133,8 +127,8 @@ var models = {
         mesh: null
     },
     train: {
-        obj: "./train/814_4.obj",
-        mtl: "./train/814_4.mtl",
+        obj: "./trainWagon.obj",
+        mtl: "./trainWagon.mtl",
         mesh: null
     }
 
@@ -142,7 +136,7 @@ var models = {
 
 function init() {
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(20, 1280 / 720, 0.1, 1000);
+    camera = new THREE.PerspectiveCamera(20, 1280 / 560, 0.1, 1000);
 
     loadingScreen.box.position.set(0, 0, 5);
     loadingScreen.camera.lookAt(loadingScreen.box.position);
@@ -184,7 +178,7 @@ function init() {
         new THREE.BoxGeometry(0.9, 5, 1000),
         new THREE.MeshPhongMaterial({
             color: 0xffffff,
-            // wireframe: USE_WIREFRAME,
+            wireframe: USE_WIREFRAME,
             map: floor_texture,
             transparent: true
         })
@@ -198,7 +192,7 @@ function init() {
         new THREE.BoxGeometry(0.9, 5, 1000),
         new THREE.MeshPhongMaterial({
             color: 0xffffff,
-            // wireframe: USE_WIREFRAME,
+            wireframe: USE_WIREFRAME,
             map: floor_texture,
             transparent: true
         })
@@ -252,7 +246,7 @@ function init() {
     camera.lookAt(new THREE.Vector3(0, player.height, 0));
 
     renderer = new THREE.WebGLRenderer();
-    renderer.setSize(1280, 720);
+    renderer.setSize(1280, 560);
 
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.BasicShadowMap;
@@ -343,16 +337,17 @@ function onResourcesLoaded() {
     Police.rotation.y -= Math.PI / 2;
     Police.scale.set(0.015, 0.013, 0.007);
 
-    Dog.position.set(-2, 1, 5);
-    scene.add(Dog);
     Dog.scale.set(0.15, 0.1, 0.002);
+    Dog.position.set(-2, -2, 5);
+    scene.add(Dog);
 
-    // Train[0].position.set(2.25, 1, 95);
-    // Train[1].position.set(-1.54, 1, 620);
-    // for (i = 0; i < 2; i++) {
-    //     Train[i].scale.set(0.25, 0.25, 1);
-    //     scene.add(Train[i]);
-    // }
+    Train[0].position.set(2.25, 0, 100);
+    Train[1].position.set(-0.8, 0, 620);
+    for (i = 0; i < 2; i++) {
+        Train[i].scale.set(16, 9, 13);
+        Train[i].rotation.y += Math.PI / 2;
+        scene.add(Train[i]);
+    }
 
     Fly[0].position.set(-2.5, 0, 112);
     Fly[1].position.set(0.5, 0, 510);
@@ -369,7 +364,7 @@ function onResourcesLoaded() {
         scene.add(Boot[i]);
     }
 
-    for (i = 0, j = 20; i < 6; i++) {
+    for (i = 0, j = 30; i < 6; i++) {
         obs1[i].position.set(3.9, 0.001, j);
         obs1[i].scale.set(4, 3, 1);
         scene.add(obs1[i]);
@@ -396,7 +391,7 @@ function onResourcesLoaded() {
     }
 
     for (i = 0, j = 40; i < 16; i++) {
-        Pole[i].scale.set(2, 5, 1);
+        Pole[i].scale.set(2, 3, 1);
         Pole[i].position.set(-0.55, 0.001, j);
         scene.add(Pole[i]);
 
@@ -456,12 +451,12 @@ function onResourcesLoaded() {
     }
 
     for (i = 60, z = 570; i < 15 + 60; i++) {
-        coin1[i].position.set(-1.2, 2, z);
+        coin1[i].position.set(-1.2, 2.5, z);
         coin1[i].scale.set(1, 1, 1);
         coin1[i].rotation.y = Math.PI / 2;
         scene.add(coin1[i]);
 
-        coin2[i].position.set(-1.2, 2, z + 3);
+        coin2[i].position.set(-1.2, 2.5, z + 3);
         coin2[i].scale.set(1, 1, 1);
         coin2[i].rotation.y = Math.PI / 2;
         scene.add(coin2[i]);
@@ -518,12 +513,15 @@ function onResourcesLoaded() {
 }
 
 function animate() {
+    document.getElementById("score").innerHTML = score;
+    document.getElementById("life").innerHTML = player.alive;
     if (player.alive == 0) {
         console.log("gameover");
         console.log("score :");
         console.log(score);
         console.log("life");
         console.log(player.alive);
+        document.getElementById("load").innerHTML = "<img src='sub.png' alt='GAME OVER' class='center' height='560' width='1280'/>"
     }
     if (RESOURCES_LOADED == false) {
         requestAnimationFrame(animate);
@@ -544,11 +542,11 @@ function animate() {
     SurferBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
     SurferBB.setFromObject(Surfer);
 
-    if (x < 10) {
+    if (x < 5) {
         x = x + 1;
     }
     else {
-        // player.zspeed = 0.5;
+        player.zspeed = 0.5;
         if (poster1.material.opacity == 1) {
             poster1.material.opacity = 0.8;
             poster2.material.opacity = 0.8;
@@ -577,7 +575,7 @@ function animate() {
         time2 = Date.now() * 0.0005;
         delta = time2 - time;
         if (Boot_Jump) {
-            Jump_time = 2;
+            Jump_time = 1;
         }
         else {
             Jump_time = 0.1;
@@ -586,7 +584,7 @@ function animate() {
             Surfer.position.y += player.yspeed;
         }
         else {
-            Surfer.position.y -= player.yspeed;
+            Surfer.position.y -= player.yspeed
         }
         if (Surfer.position.y < 0) {
             Boot_Jump = 0;
@@ -619,7 +617,7 @@ function animate() {
     Dog.position.z = Surfer.position.z - 5;
     Dog.position.x = Surfer.position.x - 1;
     if (Surfer.position.y < 2)
-        Dog.position.y = Surfer.position.y + 1;
+        Dog.position.y = Surfer.position.y + 0.8;
     else
         Dog.position.y = 1;
 
@@ -647,7 +645,7 @@ function animate() {
         TrainBB[i] = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
         TrainBB[i].setFromObject(Train[i]);
         if (TrainBB[i].intersectsBox(SurferBB)) {
-            player.alive -= 1;
+            player.alive = 0;
         }
     }
 
@@ -681,7 +679,9 @@ function animate() {
         obs1BB[i] = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
         obs1BB[i].setFromObject(obs1[i]);
         if (obs1BB[i].intersectsBox(SurferBB)) {
-            // player.zspeed -= 0.005;
+            // Police.position.set(Surfer.position.x + 1, 0, Surfer.position.z - 1);            
+            player.alive -= 1;            
+            player.zspeed -= 0.05;
         }
     }
 
@@ -691,6 +691,8 @@ function animate() {
         obs2BB[i].setFromObject(obs2[i]);
         if (obs2BB[i].intersectsBox(SurferBB)) {
             player.alive -= 1;
+            Police.position.set(Surfer.position.x + 1, 0, Surfer.position.z - 1);
+            player.zspeed -= 0.05;
         }
     }
 
@@ -717,13 +719,13 @@ function animate() {
         if (Surfer.position.x + player.speed < 2 && Surfer.position.x + player.speed > -2.5) {
             Surfer.position.x += player.speed;
         }
-        // camera.rotation.y -= player.turnSpeed;
+        camera.rotation.y -= player.turnSpeed;
     }
     if (keyboard[39]) {//right arrow
         if (Surfer.position.x - player.speed < 2 && Surfer.position.x - player.speed > -2.5) {
             Surfer.position.x -= player.speed;
         }
-        // camera.rotation.y += player.turnSpeed;
+        camera.rotation.y += player.turnSpeed;
     }
     if (keyboard[32]) {//spacebar
         Jump = 1;
