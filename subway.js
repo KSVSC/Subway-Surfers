@@ -347,12 +347,12 @@ function onResourcesLoaded() {
     scene.add(Dog);
     Dog.scale.set(0.15, 0.1, 0.002);
 
-    Train[0].position.set(2.25, 1, 95);
-    Train[1].position.set(-1.54, 1, 620);
-    for (i = 0; i < 2; i++) {
-        Train[i].scale.set(0.25, 0.25, 1);
-        scene.add(Train[i]);
-    }
+    // Train[0].position.set(2.25, 1, 95);
+    // Train[1].position.set(-1.54, 1, 620);
+    // for (i = 0; i < 2; i++) {
+    //     Train[i].scale.set(0.25, 0.25, 1);
+    //     scene.add(Train[i]);
+    // }
 
     Fly[0].position.set(-2.5, 0, 112);
     Fly[1].position.set(0.5, 0, 510);
